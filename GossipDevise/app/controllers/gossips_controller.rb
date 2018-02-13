@@ -1,7 +1,12 @@
 class GossipsController < ApplicationController
 
 	def index
-		@gossips = Gossip.all
+		unless signed_in?
+			flash[:danger] = " HEY YOU MUST BE CONNECTED TO SEE ALL GOSSIPS"
+			redirect_to new_user_session_path
+		else
+			@gossips = Gossip.all
+		end
 	end
 
 	def new
