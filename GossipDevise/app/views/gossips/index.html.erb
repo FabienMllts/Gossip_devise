@@ -1,2 +1,44 @@
-<h1>Gossips#index</h1>
-<p>Find me in app/views/gossips/index.html.erb</p>
+<% if user_signed_in? %>
+
+<h1> All Gossips </h1>
+
+<table class="table table-striped">
+  <tr>
+    <th>Anonymous author</th>
+    <th>Gossip</th>
+    <th>Creation</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @gossips.each do |gossip| %> 
+
+    <tr>
+      <td><%= gossip.user.username %></td>
+      <td><%= gossip.content %></td>
+      <td><%= gossip.created_at.strftime("%d-%m-%Y") %></td>
+      <td><%= link_to "See  gossip", gossip_path(gossip) %></td>
+      
+     <% if current_user == gossip.user %>
+      <td> <%= link_to "Delete my gossip", gossip_path(gossip),
+              method: :delete,
+              data: { confirm: 'Are you sur ?' } %> </td>
+      <% else %><td></td><td></td>
+      <% end %>        
+    </tr>
+  <% end %>
+</table>
+
+<p class = "text-center"> <%= link_to('A new gossip ?', new_gossip_path, class: "btn btn-success") %> </p> 
+
+<p class = "text-center"> <%= link_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn-warning" %>
+
+<% else %>
+
+<h1> Vous souhaitez découvrir nos gossips ? </h1>
+
+<p class = "text-center"> <%= link_to 'Log in', new_user_session_path, class: "btn btn-primary" %> or <%= link_to 'Sign up', new_user_registration_path, class: "btn btn-success" %> 
+</p>
+
+<% end %>
